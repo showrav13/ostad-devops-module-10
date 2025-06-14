@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const PORT = 3000;
-const VERSION = "Version 2";
+const VERSION = "Version 3";
 
 app.get('/', (req, res) => {
   res.send(`Hello from ${VERSION}`);
