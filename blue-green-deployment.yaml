@@ -1,0 +1,63 @@
+# Blue deployment (current stable)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-blue
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+      version: blue
+  template:
+    metadata:
+      labels:
+        app: web
+        version: blue
+    spec:
+      containers:
+        - name: web
+          image: showrav13/kube-app:v1
+          ports:
+            - containerPort: 3000
+
+---
+# Green deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-green
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+      version: green
+  template:
+    metadata:
+      labels:
+        app: web
+        version: green
+    spec:
+      containers:
+        - name: web
+          image: showrav13/kube-app:v2
+          ports:
+            - containerPort: 3000
+
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: web
+    version: green
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+      nodePort: 30080
